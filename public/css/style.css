@@ -1,12 +1,36 @@
 body{
     margin: 0;
     padding: 0;
-}
-
-#app{
     background-color: #ededed;
     font-family: 'Nunito', sans-serif;
     color: #636b6f;
+}
+
+
+header{
+    height: 100px;
+    font-family: 'Nunito', sans-serif;
+    color: #636b6f;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0 20px;
+    background-color: #636b6f;
+    border-bottom: 5px solid rgba(0,0,0,0.2);
+}
+
+header .search{
+    font-size: 20px;
+    height: 16px;
+    margin: none;
+}
+
+#logo-h{
+    max-width: 80px;
+}
+
+#mainDiv{
     font-weight: 200;
     height: 100vh;
     margin: 0;
@@ -16,7 +40,7 @@ body{
     padding-top: 10%;
 }
 
-#search{
+.search{
     width: 75%;
     max-width: 600px;
     margin: 0 auto;
