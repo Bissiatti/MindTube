@@ -1,81 +1,125 @@
 <html>
-<head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
 <center>
 <h1></h1>
 </center>
 
 <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
 <script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
 
-<style type="text/css">
 
-        #mynetwork {
-            width: 1000px;
-            height: 800px;
-            background-color: #ffffff;
-            border: 1px solid lightgray;
-            position: relative;
-            float: left;
-        }
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
 
-        
+             #mynetwork {
+                 width: 1000px;
+                 height: 800px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
 
-        
+             
 
-        
-        /* position absolute is important and the container has to be relative or absolute as well. */
-	    div.popup {
-            position:absolute;
-            top:0px;
-            left:0px;
+             
+
+             
+             /* position absolute is important and the container has to be relative or absolute as well. */
+          div.popup {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 display:none;
+                 background-color:#f5f4ed;
+                 -moz-border-radius: 3px;
+                 -webkit-border-radius: 3px;
+                 border-radius: 3px;
+                 border: 1px solid #808074;
+                 box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+          }
+
+          /* hide the original tooltip */
+          .vis-tooltip {
             display:none;
-            background-color:#f5f4ed;
-            -moz-border-radius: 3px;
-            -webkit-border-radius: 3px;
-            border-radius: 3px;
-            border: 1px solid #808074;
-            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-	    }
-
-	    /* hide the original tooltip */
-	    .vis-network-tooltip {
-	      display:none;
-	    }
-        
-</style>
-
-</head>
-
-<body>
-<div id = "mynetwork"></div>
+          }
+             
+        </style>
+    </head>
 
 
-<script type="text/javascript">
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
 
-    // initialize global variables.
-    var edges;
-    var nodes;
-    var network; 
-    var container;
-    var options, data;
-
-    
-    // This method is responsible for drawing the graph, returns the drawn network
-    function drawGraph() {
-        var container = document.getElementById('mynetwork');
         
         
 
-        // parsing and collecting nodes and edges from the python
-        nodes = new vis.DataSet([{"color": "#7f333f", "font": "23px arial white", "id": "gold", "label": "gold", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=14s\u0027\u003e0:14\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=280s\u0027\u003e4:40\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=295s\u0027\u003e4:55\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=318s\u0027\u003e5:18\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=326s\u0027\u003e5:26\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=335s\u0027\u003e5:35\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=362s\u0027\u003e6:02\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=375s\u0027\u003e6:15\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=428s\u0027\u003e7:08\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=432s\u0027\u003e7:12\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=440s\u0027\u003e7:20\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=473s\u0027\u003e7:53\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "paper", "label": "paper", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=36s\u0027\u003e0:36\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=43s\u0027\u003e0:43\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=48s\u0027\u003e0:48\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=335s\u0027\u003e5:35\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=463s\u0027\u003e7:43\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=469s\u0027\u003e7:49\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "silver", "label": "silver", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=14s\u0027\u003e0:14\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=299s\u0027\u003e4:59\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=375s\u0027\u003e6:15\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=386s\u0027\u003e6:26\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=428s\u0027\u003e7:08\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "like", "label": "like", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=14s\u0027\u003e0:14\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=152s\u0027\u003e2:32\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=314s\u0027\u003e5:14\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=332s\u0027\u003e5:32\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=335s\u0027\u003e5:35\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=375s\u0027\u003e6:15\u003cbr\u003e"}, {"color": "#7f333f", "font": "30px arial white", "id": "money", "label": "money", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=31s\u0027\u003e0:31\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=36s\u0027\u003e0:36\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=39s\u0027\u003e0:39\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=48s\u0027\u003e0:48\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=172s\u0027\u003e2:52\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=193s\u0027\u003e3:13\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=197s\u0027\u003e3:17\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=212s\u0027\u003e3:32\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=217s\u0027\u003e3:37\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=220s\u0027\u003e3:40\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=225s\u0027\u003e3:45\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=253s\u0027\u003e4:13\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=273s\u0027\u003e4:33\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=295s\u0027\u003e4:55\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=299s\u0027\u003e4:59\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=303s\u0027\u003e5:03\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=306s\u0027\u003e5:06\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=343s\u0027\u003e5:43\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=350s\u0027\u003e5:50\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=371s\u0027\u003e6:11\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=469s\u0027\u003e7:49\u003cbr\u003e"}, {"color": "#7f333f", "font": "18px arial white", "id": "value", "label": "value", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=178s\u0027\u003e2:58\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=306s\u0027\u003e5:06\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=314s\u0027\u003e5:14\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=318s\u0027\u003e5:18\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=358s\u0027\u003e5:58\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=371s\u0027\u003e6:11\u003cbr\u003e"}, {"color": "#7f333f", "font": "15px arial white", "id": "people", "label": "people", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=41s\u0027\u003e0:41\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=43s\u0027\u003e0:43\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=94s\u0027\u003e1:34\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=473s\u0027\u003e7:53\u003cbr\u003e"}, {"color": "#7f333f", "font": "20px arial white", "id": "want", "label": "want", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=104s\u0027\u003e1:44\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=106s\u0027\u003e1:46\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=115s\u0027\u003e1:55\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=119s\u0027\u003e1:59\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=123s\u0027\u003e2:03\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=136s\u0027\u003e2:16\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=161s\u0027\u003e2:41\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=270s\u0027\u003e4:30\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=460s\u0027\u003e7:40\u003cbr\u003e"}, {"color": "#7f333f", "font": "24px arial white", "id": "trade", "label": "trade", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=54s\u0027\u003e0:54\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=69s\u0027\u003e1:09\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=72s\u0027\u003e1:12\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=78s\u0027\u003e1:18\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=99s\u0027\u003e1:39\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=106s\u0027\u003e1:46\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=111s\u0027\u003e1:51\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=123s\u0027\u003e2:03\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=136s\u0027\u003e2:16\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=140s\u0027\u003e2:20\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=152s\u0027\u003e2:32\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=156s\u0027\u003e2:36\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=161s\u0027\u003e2:41\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=164s\u0027\u003e2:44\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=332s\u0027\u003e5:32\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "massive", "label": "massive", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=18s\u0027\u003e0:18\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=29s\u0027\u003e0:29\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=346s\u0027\u003e5:46\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=425s\u0027\u003e7:05\u003cbr\u003e"}, {"color": "#7f333f", "font": "19px arial white", "id": "often", "label": "often", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=72s\u0027\u003e1:12\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=185s\u0027\u003e3:05\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=197s\u0027\u003e3:17\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=208s\u0027\u003e3:28\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=212s\u0027\u003e3:32\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=299s\u0027\u003e4:59\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=350s\u0027\u003e5:50\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=417s\u0027\u003e6:57\u003cbr\u003e"}, {"color": "#7f333f", "font": "19px arial white", "id": "even", "label": "even", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=56s\u0027\u003e0:56\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=127s\u0027\u003e2:07\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=232s\u0027\u003e3:52\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=258s\u0027\u003e4:18\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=261s\u0027\u003e4:21\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=310s\u0027\u003e5:10\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=403s\u0027\u003e6:43\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=411s\u0027\u003e6:51\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=440s\u0027\u003e7:20\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "commodity", "label": "commodity", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=306s\u0027\u003e5:06\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=343s\u0027\u003e5:43\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=350s\u0027\u003e5:50\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=371s\u0027\u003e6:11\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=421s\u0027\u003e7:01\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=425s\u0027\u003e7:05\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "enough", "label": "enough", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=189s\u0027\u003e3:09\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=379s\u0027\u003e6:19\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=403s\u0027\u003e6:43\u003cbr\u003e"}, {"color": "#7f333f", "font": "18px arial white", "id": "currency", "label": "currency", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=14s\u0027\u003e0:14\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=208s\u0027\u003e3:28\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=322s\u0027\u003e5:22\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=358s\u0027\u003e5:58\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=425s\u0027\u003e7:05\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=432s\u0027\u003e7:12\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "think", "label": "think", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=72s\u0027\u003e1:12\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=75s\u0027\u003e1:15\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=131s\u0027\u003e2:11\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=185s\u0027\u003e3:05\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=299s\u0027\u003e4:59\u003cbr\u003e"}, {"color": "#7f333f", "font": "18px arial white", "id": "one", "label": "one", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=232s\u0027\u003e3:52\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=261s\u0027\u003e4:21\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=265s\u0027\u003e4:25\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=278s\u0027\u003e4:38\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=303s\u0027\u003e5:03\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=329s\u0027\u003e5:29\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=343s\u0027\u003e5:43\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "time", "label": "time", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=119s\u0027\u003e1:59\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=148s\u0027\u003e2:28\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=169s\u0027\u003e2:49\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=193s\u0027\u003e3:13\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=465s\u0027\u003e7:45\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "something", "label": "something", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=43s\u0027\u003e0:43\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=169s\u0027\u003e2:49\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=332s\u0027\u003e5:32\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "used", "label": "used", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=193s\u0027\u003e3:13\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=261s\u0027\u003e4:21\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=273s\u0027\u003e4:33\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=310s\u0027\u003e5:10\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=329s\u0027\u003e5:29\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "somebody", "label": "somebody", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=115s\u0027\u003e1:55\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=253s\u0027\u003e4:13\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=354s\u0027\u003e5:54\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=421s\u0027\u003e7:01\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=436s\u0027\u003e7:16\u003cbr\u003e"}, {"color": "#7f333f", "font": "18px arial white", "id": "problem", "label": "problem", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=81s\u0027\u003e1:21\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=86s\u0027\u003e1:26\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=111s\u0027\u003e1:51\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=127s\u0027\u003e2:07\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=140s\u0027\u003e2:20\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=473s\u0027\u003e7:53\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "good", "label": "good", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=119s\u0027\u003e1:59\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=123s\u0027\u003e2:03\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=156s\u0027\u003e2:36\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=164s\u0027\u003e2:44\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=172s\u0027\u003e2:52\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=178s\u0027\u003e2:58\u003cbr\u003e"}, {"color": "#7f333f", "font": "15px arial white", "id": "run", "label": "run", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=81s\u0027\u003e1:21\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=84s\u0027\u003e1:24\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=90s\u0027\u003e1:30\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=289s\u0027\u003e4:49\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "started", "label": "started", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=63s\u0027\u003e1:03\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=67s\u0027\u003e1:07\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=425s\u0027\u003e7:05\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=432s\u0027\u003e7:12\u003cbr\u003e"}]);
-        edges = new vis.DataSet([{"from": "gold", "physics": false, "to": "paper", "weight": 1.0}, {"from": "gold", "physics": false, "to": "silver", "weight": 3.0}, {"from": "gold", "physics": false, "to": "like", "weight": 1.0}, {"from": "gold", "physics": false, "to": "money", "weight": 0.5}, {"from": "gold", "physics": false, "to": "value", "weight": 0.25}, {"from": "gold", "physics": false, "to": "people", "weight": 0.25}, {"from": "gold", "physics": false, "to": "want", "weight": 0.5}, {"from": "gold", "physics": false, "to": "trade", "weight": 0.25}, {"from": "gold", "physics": false, "to": "massive", "weight": 0.125}, {"from": "gold", "physics": false, "to": "often", "weight": 0.25}, {"from": "gold", "physics": false, "to": "even", "weight": 0.5}, {"from": "gold", "physics": false, "to": "commodity", "weight": 0.25}, {"from": "gold", "physics": false, "to": "enough", "weight": 0.125}, {"from": "gold", "physics": false, "to": "currency", "weight": 0.5}, {"from": "gold", "physics": false, "to": "think", "weight": 0.5}, {"from": "gold", "physics": false, "to": "one", "weight": 2.0}, {"from": "paper", "physics": false, "to": "people", "weight": 1.0}, {"from": "paper", "physics": false, "to": "money", "weight": 2.0}, {"from": "paper", "physics": false, "to": "time", "weight": 0.25}, {"from": "silver", "physics": false, "to": "massive", "weight": 0.5}, {"from": "silver", "physics": false, "to": "enough", "weight": 0.25}, {"from": "silver", "physics": false, "to": "money", "weight": 0.25}, {"from": "silver", "physics": false, "to": "trade", "weight": 0.125}, {"from": "like", "physics": false, "to": "currency", "weight": 1.0}, {"from": "like", "physics": false, "to": "something", "weight": 0.5}, {"from": "like", "physics": false, "to": "used", "weight": 0.5}, {"from": "like", "physics": false, "to": "money", "weight": 0.5}, {"from": "somebody", "physics": false, "to": "currency", "weight": 0.5}, {"from": "somebody", "physics": false, "to": "problem", "weight": 0.5}, {"from": "somebody", "physics": false, "to": "often", "weight": 0.25}, {"from": "somebody", "physics": false, "to": "even", "weight": 0.5}, {"from": "somebody", "physics": false, "to": "trade", "weight": 0.5}, {"from": "somebody", "physics": false, "to": "money", "weight": 0.5}, {"from": "even", "physics": false, "to": "one", "weight": 1.0}, {"from": "even", "physics": false, "to": "problem", "weight": 0.5}, {"from": "even", "physics": false, "to": "think", "weight": 0.25}, {"from": "even", "physics": false, "to": "massive", "weight": 0.5}, {"from": "even", "physics": false, "to": "money", "weight": 0.25}, {"from": "even", "physics": false, "to": "trade", "weight": 0.5}, {"from": "often", "physics": false, "to": "money", "weight": 1.0}, {"from": "often", "physics": false, "to": "think", "weight": 3.0}, {"from": "often", "physics": false, "to": "trade", "weight": 0.5}, {"from": "often", "physics": false, "to": "currency", "weight": 0.25}, {"from": "often", "physics": false, "to": "good", "weight": 0.5}, {"from": "often", "physics": false, "to": "commodity", "weight": 0.5}, {"from": "often", "physics": false, "to": "value", "weight": 0.5}, {"from": "often", "physics": false, "to": "problem", "weight": 0.25}, {"from": "often", "physics": false, "to": "massive", "weight": 0.25}, {"from": "money", "physics": false, "to": "used", "weight": 1.0}, {"from": "money", "physics": false, "to": "one", "weight": 1.0}, {"from": "money", "physics": false, "to": "commodity", "weight": 3.0}, {"from": "money", "physics": false, "to": "think", "weight": 1.0}, {"from": "money", "physics": false, "to": "money", "weight": 1.0}, {"from": "money", "physics": false, "to": "value", "weight": 1.0}, {"from": "money", "physics": false, "to": "something", "weight": 0.5}, {"from": "money", "physics": false, "to": "time", "weight": 0.5}, {"from": "money", "physics": false, "to": "massive", "weight": 0.5}, {"from": "money", "physics": false, "to": "problem", "weight": 0.5}, {"from": "money", "physics": false, "to": "currency", "weight": 0.5}, {"from": "money", "physics": false, "to": "trade", "weight": 0.5}, {"from": "money", "physics": false, "to": "run", "weight": 0.125}, {"from": "money", "physics": false, "to": "started", "weight": 0.25}, {"from": "money", "physics": false, "to": "want", "weight": 0.5}, {"from": "money", "physics": false, "to": "enough", "weight": 0.5}, {"from": "money", "physics": false, "to": "people", "weight": 0.125}, {"from": "money", "physics": false, "to": "good", "weight": 0.25}, {"from": "problem", "physics": false, "to": "people", "weight": 1.0}, {"from": "problem", "physics": false, "to": "run", "weight": 1.0}, {"from": "problem", "physics": false, "to": "commodity", "weight": 0.5}, {"from": "problem", "physics": false, "to": "trade", "weight": 0.5}, {"from": "massive", "physics": false, "to": "started", "weight": 0.5}, {"from": "value", "physics": false, "to": "commodity", "weight": 1.0}, {"from": "value", "physics": false, "to": "currency", "weight": 0.5}, {"from": "value", "physics": false, "to": "good", "weight": 0.25}, {"from": "value", "physics": false, "to": "trade", "weight": 0.25}, {"from": "trade", "physics": false, "to": "think", "weight": 2.0}, {"from": "trade", "physics": false, "to": "want", "weight": 1.0}, {"from": "trade", "physics": false, "to": "something", "weight": 1.0}, {"from": "trade", "physics": false, "to": "run", "weight": 1.0}, {"from": "trade", "physics": false, "to": "started", "weight": 0.25}, {"from": "trade", "physics": false, "to": "one", "weight": 0.5}, {"from": "trade", "physics": false, "to": "time", "weight": 0.5}, {"from": "trade", "physics": false, "to": "used", "weight": 0.25}, {"from": "trade", "physics": false, "to": "enough", "weight": 0.25}, {"from": "trade", "physics": false, "to": "good", "weight": 0.5}, {"from": "think", "physics": false, "to": "think", "weight": 1.0}, {"from": "want", "physics": false, "to": "good", "weight": 3.0}, {"from": "want", "physics": false, "to": "time", "weight": 0.5}, {"from": "commodity", "physics": false, "to": "currency", "weight": 1.0}, {"from": "commodity", "physics": false, "to": "started", "weight": 0.5}, {"from": "currency", "physics": false, "to": "started", "weight": 0.5}, {"from": "used", "physics": false, "to": "time", "weight": 0.5}, {"from": "used", "physics": false, "to": "one", "weight": 0.5}, {"from": "time", "physics": false, "to": "one", "weight": 0.25}]);
+        <script type="text/javascript">
 
-        // adding nodes and edges to the graph
-        data = {nodes: nodes, edges: edges};
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
 
-        var options = {
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#7f333f", "font": "17px arial white", "id": "somebody", "label": "somebody", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=115s\u0027\u003e1:55\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=253s\u0027\u003e4:13\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=354s\u0027\u003e5:54\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=421s\u0027\u003e7:01\u003cbr\u003e"}, {"color": "#7f333f", "font": "18px arial white", "id": "currency", "label": "currency", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=208s\u0027\u003e3:28\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=322s\u0027\u003e5:22\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=425s\u0027\u003e7:05\u003cbr\u003e"}, {"color": "#7f333f", "font": "18px arial white", "id": "problem", "label": "problem", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=81s\u0027\u003e1:21\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=127s\u0027\u003e2:07\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=473s\u0027\u003e7:53\u003cbr\u003e"}, {"color": "#7f333f", "font": "19px arial white", "id": "often", "label": "often", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=72s\u0027\u003e1:12\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=185s\u0027\u003e3:05\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=299s\u0027\u003e4:59\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=350s\u0027\u003e5:50\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=417s\u0027\u003e6:57\u003cbr\u003e"}, {"color": "#7f333f", "font": "20px arial white", "id": "even", "label": "even", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=56s\u0027\u003e0:56\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=127s\u0027\u003e2:07\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=232s\u0027\u003e3:52\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=310s\u0027\u003e5:10\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=403s\u0027\u003e6:43\u003cbr\u003e"}, {"color": "#7f333f", "font": "25px arial white", "id": "trade", "label": "trade", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=54s\u0027\u003e0:54\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=99s\u0027\u003e1:39\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=152s\u0027\u003e2:32\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=332s\u0027\u003e5:32\u003cbr\u003e"}, {"color": "#7f333f", "font": "30px arial white", "id": "money", "label": "money", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=48s\u0027\u003e0:48\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=172s\u0027\u003e2:52\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=217s\u0027\u003e3:37\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=273s\u0027\u003e4:33\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=343s\u0027\u003e5:43\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=469s\u0027\u003e7:49\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "massive", "label": "massive", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=346s\u0027\u003e5:46\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=425s\u0027\u003e7:05\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "started", "label": "started", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=63s\u0027\u003e1:03\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=425s\u0027\u003e7:05\u003cbr\u003e"}, {"color": "#7f333f", "font": "23px arial white", "id": "gold", "label": "gold", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=280s\u0027\u003e4:40\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=326s\u0027\u003e5:26\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=375s\u0027\u003e6:15\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=428s\u0027\u003e7:08\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=473s\u0027\u003e7:53\u003cbr\u003e"}, {"color": "#7f333f", "font": "18px arial white", "id": "one", "label": "one", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=232s\u0027\u003e3:52\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=278s\u0027\u003e4:38\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=329s\u0027\u003e5:29\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "think", "label": "think", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=72s\u0027\u003e1:12\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=131s\u0027\u003e2:11\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=185s\u0027\u003e3:05\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=299s\u0027\u003e4:59\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "something", "label": "something", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=169s\u0027\u003e2:49\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=332s\u0027\u003e5:32\u003cbr\u003e"}, {"color": "#7f333f", "font": "15px arial white", "id": "run", "label": "run", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=81s\u0027\u003e1:21\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=289s\u0027\u003e4:49\u003cbr\u003e"}, {"color": "#7f333f", "font": "21px arial white", "id": "want", "label": "want", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=104s\u0027\u003e1:44\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=161s\u0027\u003e2:41\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=270s\u0027\u003e4:30\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=460s\u0027\u003e7:40\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "food", "label": "food", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=102s\u0027\u003e1:42\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=152s\u0027\u003e2:32\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "time", "label": "time", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=119s\u0027\u003e1:59\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=169s\u0027\u003e2:49\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=465s\u0027\u003e7:45\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "used", "label": "used", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=193s\u0027\u003e3:13\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=261s\u0027\u003e4:21\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=310s\u0027\u003e5:10\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "enough", "label": "enough", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=189s\u0027\u003e3:09\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=379s\u0027\u003e6:19\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "good", "label": "good", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=119s\u0027\u003e1:59\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=164s\u0027\u003e2:44\u003cbr\u003e"}, {"color": "#7f333f", "font": "18px arial white", "id": "value", "label": "value", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=178s\u0027\u003e2:58\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=306s\u0027\u003e5:06\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=358s\u0027\u003e5:58\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "paper", "label": "paper", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=48s\u0027\u003e0:48\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=335s\u0027\u003e5:35\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=463s\u0027\u003e7:43\u003cbr\u003e"}, {"color": "#7f333f", "font": "17px arial white", "id": "commodity", "label": "commodity", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=306s\u0027\u003e5:06\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=350s\u0027\u003e5:50\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=421s\u0027\u003e7:01\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "like", "label": "like", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=152s\u0027\u003e2:32\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=314s\u0027\u003e5:14\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=375s\u0027\u003e6:15\u003cbr\u003e"}, {"color": "#7f333f", "font": "16px arial white", "id": "people", "label": "people", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=0s\u0027\u003e0:00\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=94s\u0027\u003e1:34\u003cbr\u003e\u003ca href=\u0027https://www.youtube.com/watch?v=-nZkP2b-4vo\u0026t=473s\u0027\u003e7:53\u003cbr\u003e"}]);
+                  edges = new vis.DataSet([{"from": "somebody", "physics": false, "to": "currency", "width": 1}, {"from": "somebody", "physics": false, "to": "problem", "width": 1}, {"from": "somebody", "physics": false, "to": "often", "width": 1}, {"from": "somebody", "physics": false, "to": "even", "width": 1}, {"from": "somebody", "physics": false, "to": "trade", "width": 1}, {"from": "somebody", "physics": false, "to": "money", "width": 1}, {"from": "massive", "physics": false, "to": "money", "width": 1}, {"from": "massive", "physics": false, "to": "started", "width": 1}, {"from": "massive", "physics": false, "to": "even", "width": 1}, {"from": "massive", "physics": false, "to": "gold", "width": 1}, {"from": "massive", "physics": false, "to": "often", "width": 1}, {"from": "even", "physics": false, "to": "one", "width": 1}, {"from": "even", "physics": false, "to": "problem", "width": 1}, {"from": "even", "physics": false, "to": "think", "width": 1}, {"from": "even", "physics": false, "to": "money", "width": 1}, {"from": "even", "physics": false, "to": "trade", "width": 1}, {"from": "even", "physics": false, "to": "gold", "width": 1}, {"from": "trade", "physics": false, "to": "something", "width": 1}, {"from": "trade", "physics": false, "to": "run", "width": 1}, {"from": "trade", "physics": false, "to": "want", "width": 1}, {"from": "trade", "physics": false, "to": "food", "width": 1}, {"from": "trade", "physics": false, "to": "think", "width": 1}, {"from": "trade", "physics": false, "to": "often", "width": 1}, {"from": "trade", "physics": false, "to": "started", "width": 1}, {"from": "trade", "physics": false, "to": "one", "width": 1}, {"from": "trade", "physics": false, "to": "problem", "width": 1}, {"from": "trade", "physics": false, "to": "time", "width": 1}, {"from": "trade", "physics": false, "to": "money", "width": 1}, {"from": "trade", "physics": false, "to": "used", "width": 1}, {"from": "trade", "physics": false, "to": "gold", "width": 1}, {"from": "trade", "physics": false, "to": "enough", "width": 1}, {"from": "trade", "physics": false, "to": "good", "width": 1}, {"from": "trade", "physics": false, "to": "value", "width": 1}, {"from": "money", "physics": false, "to": "used", "width": 1}, {"from": "money", "hidden": true, "physics": false, "to": "money", "width": 1}, {"from": "money", "physics": false, "to": "paper", "width": 1}, {"from": "money", "physics": false, "to": "commodity", "width": 1}, {"from": "money", "physics": false, "to": "think", "width": 1}, {"from": "money", "physics": false, "to": "value", "width": 1}, {"from": "money", "physics": false, "to": "one", "width": 1}, {"from": "money", "physics": false, "to": "often", "width": 1}, {"from": "money", "physics": false, "to": "gold", "width": 1}, {"from": "money", "physics": false, "to": "something", "width": 1}, {"from": "money", "physics": false, "to": "time", "width": 1}, {"from": "money", "physics": false, "to": "problem", "width": 1}, {"from": "money", "physics": false, "to": "currency", "width": 1}, {"from": "money", "physics": false, "to": "like", "width": 1}, {"from": "money", "physics": false, "to": "run", "width": 1}, {"from": "money", "physics": false, "to": "started", "width": 1}, {"from": "money", "physics": false, "to": "want", "width": 1}, {"from": "money", "physics": false, "to": "food", "width": 1}, {"from": "money", "physics": false, "to": "enough", "width": 1}, {"from": "money", "physics": false, "to": "people", "width": 1}, {"from": "money", "physics": false, "to": "good", "width": 1}, {"from": "run", "physics": false, "to": "problem", "width": 1}, {"from": "time", "physics": false, "to": "used", "width": 1}, {"from": "time", "physics": false, "to": "paper", "width": 1}, {"from": "time", "physics": false, "to": "one", "width": 1}, {"from": "time", "physics": false, "to": "want", "width": 1}, {"from": "often", "physics": false, "to": "think", "width": 1}, {"from": "often", "physics": false, "to": "currency", "width": 1}, {"from": "often", "physics": false, "to": "good", "width": 1}, {"from": "often", "physics": false, "to": "gold", "width": 1}, {"from": "often", "physics": false, "to": "value", "width": 1}, {"from": "often", "physics": false, "to": "commodity", "width": 1}, {"from": "often", "physics": false, "to": "problem", "width": 1}, {"from": "want", "physics": false, "to": "good", "width": 1}, {"from": "want", "physics": false, "to": "food", "width": 1}, {"from": "want", "physics": false, "to": "gold", "width": 1}, {"from": "currency", "physics": false, "to": "like", "width": 1}, {"from": "currency", "physics": false, "to": "commodity", "width": 1}, {"from": "currency", "physics": false, "to": "value", "width": 1}, {"from": "currency", "physics": false, "to": "started", "width": 1}, {"from": "currency", "physics": false, "to": "gold", "width": 1}, {"from": "value", "physics": false, "to": "commodity", "width": 1}, {"from": "value", "physics": false, "to": "good", "width": 1}, {"from": "value", "physics": false, "to": "gold", "width": 1}, {"from": "started", "physics": false, "to": "commodity", "width": 1}, {"from": "something", "physics": false, "to": "like", "width": 1}, {"from": "commodity", "physics": false, "to": "problem", "width": 1}, {"from": "commodity", "physics": false, "to": "gold", "width": 1}, {"from": "gold", "physics": false, "to": "paper", "width": 1}, {"from": "gold", "physics": false, "to": "like", "width": 1}, {"from": "gold", "physics": false, "to": "people", "width": 1}, {"from": "gold", "physics": false, "to": "enough", "width": 1}, {"from": "gold", "physics": false, "to": "think", "width": 1}, {"from": "gold", "physics": false, "to": "one", "width": 1}, {"from": "problem", "physics": false, "to": "people", "width": 1}, {"from": "one", "physics": false, "to": "used", "width": 1}, {"from": "used", "physics": false, "to": "like", "width": 1}, {"from": "think", "hidden": true, "physics": false, "to": "think", "width": 1}, {"from": "paper", "physics": false, "to": "people", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
     "configure": {
         "enabled": false
     },
@@ -84,8 +128,8 @@
             "inherit": true
         },
         "smooth": {
-            "enabled": false,
-            "type": "continuous"
+            "enabled": true,
+            "type": "dynamic"
         }
     },
     "interaction": {
@@ -104,87 +148,89 @@
         }
     }
 };
-        
-        
 
-        
-
-        network = new vis.Network(container, data, options);
-	 
-        
-        // make a custom popup
-        var popup = document.createElement("div");
-        popup.className = 'popup';
-        popupTimeout = null;
-        popup.addEventListener('mouseover', function () {
-            console.log(popup)
-            if (popupTimeout !== null) {
-                clearTimeout(popupTimeout);
-                popupTimeout = null;
-            }
-        });
-        popup.addEventListener('mouseout', function () {
-            if (popupTimeout === null) {
-                hidePopup();
-            }
-        });
-        container.appendChild(popup);
+                  
 
 
-        // use the popup event to show
-        network.on("showPopup", function (params) {
-            showPopup(params);
-        });
+                  
 
-        // use the hide event to hide it
-        network.on("hidePopup", function (params) {
-            hidePopup();
-        });
+                  network = new vis.Network(container, data, options);
 
+                  
 
-        // hiding the popup through css
-        function hidePopup() {
-            popupTimeout = setTimeout(function () { popup.style.display = 'none'; }, 500);
-        }
+                  
 
-        // showing the popup
-        function showPopup(nodeId) {
-            // get the data from the vis.DataSet
-            var nodeData = nodes.get([nodeId]);
-            popup.innerHTML = nodeData[0].title;
-
-            // get the position of the node
-            var posCanvas = network.getPositions([nodeId])[nodeId];
-
-            // get the bounding box of the node
-            var boundingBox = network.getBoundingBox(nodeId);
-
-            //position tooltip:
-            posCanvas.x = posCanvas.x + 0.5 * (boundingBox.right - boundingBox.left);
-
-            // convert coordinates to the DOM space
-            var posDOM = network.canvasToDOM(posCanvas);
-
-            // Give it an offset
-            posDOM.x += 10;
-            posDOM.y -= 20;
-
-            // show and place the tooltip.
-            popup.style.display = 'block';
-            popup.style.top = posDOM.y + 'px';
-            popup.style.left = posDOM.x + 'px';
-        }
-        
+                  
+                  // make a custom popup
+                      var popup = document.createElement("div");
+                      popup.className = 'popup';
+                      popupTimeout = null;
+                      popup.addEventListener('mouseover', function () {
+                          console.log(popup)
+                          if (popupTimeout !== null) {
+                              clearTimeout(popupTimeout);
+                              popupTimeout = null;
+                          }
+                      });
+                      popup.addEventListener('mouseout', function () {
+                          if (popupTimeout === null) {
+                              hidePopup();
+                          }
+                      });
+                      container.appendChild(popup);
 
 
-        
+                      // use the popup event to show
+                      network.on("showPopup", function (params) {
+                          showPopup(params);
+                      });
 
-        return network;
+                      // use the hide event to hide it
+                      network.on("hidePopup", function (params) {
+                          hidePopup();
+                      });
 
-    }
+                      // hiding the popup through css
+                      function hidePopup() {
+                          popupTimeout = setTimeout(function () { popup.style.display = 'none'; }, 500);
+                      }
 
-    drawGraph();
+                      // showing the popup
+                      function showPopup(nodeId) {
+                          // get the data from the vis.DataSet
+                          var nodeData = nodes.get([nodeId]);
+                          popup.innerHTML = nodeData[0].title;
 
-</script>
-</body>
+                          // get the position of the node
+                          var posCanvas = network.getPositions([nodeId])[nodeId];
+
+                          // get the bounding box of the node
+                          var boundingBox = network.getBoundingBox(nodeId);
+
+                          //position tooltip:
+                          posCanvas.x = posCanvas.x + 0.5 * (boundingBox.right - boundingBox.left);
+
+                          // convert coordinates to the DOM space
+                          var posDOM = network.canvasToDOM(posCanvas);
+
+                          // Give it an offset
+                          posDOM.x += 10;
+                          posDOM.y -= 20;
+
+                          // show and place the tooltip.
+                          popup.style.display = 'block';
+                          popup.style.top = posDOM.y + 'px';
+                          popup.style.left = posDOM.x + 'px';
+                      }
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
 </html>
