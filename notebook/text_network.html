@@ -1,0 +1,190 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 1000px;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+        /* position absolute is important and the container has to be relative or absolute as well. */
+	    div.popup {
+            position:absolute;
+            top:0px;
+            left:0px;
+            display:none;
+            background-color:#f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+	    }
+
+	    /* hide the original tooltip */
+	    .vis-network-tooltip {
+	      display:none;
+	    }
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#7f333f", "font": "14px arial white", "id": "petista", "label": "petista", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "14px arial white", "id": "pedir", "label": "pedir", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "20px arial white", "id": "estradas", "label": "estradas", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "13px arial white", "id": "debate", "label": "debate", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "25px arial white", "id": "presidente", "label": "presidente", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "13px arial white", "id": "caminhoneiros", "label": "caminhoneiros", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "14px arial white", "id": "2018", "label": "2018", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "13px arial white", "id": "Federal", "label": "Federal", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "14px arial white", "id": "governo", "label": "governo", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "24px arial white", "id": "Supremo", "label": "Supremo", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "24px arial white", "id": "corte", "label": "corte", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "18px arial white", "id": "Planalto", "label": "Planalto", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "30px arial white", "id": "Bolsonaro", "label": "Bolsonaro", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "25px arial white", "id": "Moraes", "label": "Moraes", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "12px arial white", "id": "ministros", "label": "ministros", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "13px arial white", "id": "embate", "label": "embate", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "13px arial white", "id": "elei\u00e7\u00e3o", "label": "elei\u00e7\u00e3o", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "13px arial white", "id": "generais", "label": "generais", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "14px arial white", "id": "diversos", "label": "diversos", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "15px arial white", "id": "ministro", "label": "ministro", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "13px arial white", "id": "Ex\u00e9rcito", "label": "Ex\u00e9rcito", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "13px arial white", "id": "domingo", "label": "domingo", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "19px arial white", "id": "Lula", "label": "Lula", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "14px arial white", "id": "PRF", "label": "PRF", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}, {"color": "#7f333f", "font": "13px arial white", "id": "Constitui\u00e7\u00e3o", "label": "Constitui\u00e7\u00e3o", "labelHighlightBold": true, "shape": "ellipse", "size": 10, "title": "\u003ca href=\u0027http://www.google.com\u0027\u003egoogle \u003cbr\u003e \u003ca href=\u0027http://www.google.com\u0027\u003eyout"}]);
+        edges = new vis.DataSet([{"from": "petista", "physics": false, "to": "pedir", "weight": 0.5, "width": 0.0625}, {"from": "petista", "physics": false, "to": "estradas", "weight": 0.25, "width": 0.00390625}, {"from": "petista", "physics": false, "to": "debate", "weight": 0.25, "width": 0.00390625}, {"from": "petista", "physics": false, "to": "presidente", "weight": 0.25, "width": 0.00390625}, {"from": "caminhoneiros", "to": "2018", "weight": 1.0, "width": 1.0}, {"from": "caminhoneiros", "physics": false, "to": "estradas", "weight": 0.5, "width": 0.0625}, {"from": "caminhoneiros", "physics": false, "to": "Federal", "weight": 0.25, "width": 0.00390625}, {"from": "caminhoneiros", "physics": false, "to": "governo", "weight": 0.25, "width": 0.00390625}, {"from": "Supremo", "to": "corte", "weight": 1.0, "width": 1.0}, {"from": "Supremo", "to": "Planalto", "weight": 1.0, "width": 1.0}, {"from": "Supremo", "physics": false, "to": "Bolsonaro", "weight": 0.5, "width": 0.0625}, {"from": "Supremo", "physics": false, "to": "Federal", "weight": 0.5, "width": 0.0625}, {"from": "Supremo", "physics": false, "to": "Moraes", "weight": 0.25, "width": 0.00390625}, {"from": "Supremo", "physics": false, "to": "pedir", "weight": 0.25, "width": 0.00390625}, {"from": "ministros", "to": "corte", "weight": 1.0, "width": 1.0}, {"from": "ministros", "physics": false, "to": "Planalto", "weight": 0.5, "width": 0.0625}, {"from": "ministros", "physics": false, "to": "debate", "weight": 0.25, "width": 0.00390625}, {"from": "ministros", "physics": false, "to": "embate", "weight": 0.25, "width": 0.00390625}, {"from": "presidente", "physics": false, "to": "Bolsonaro", "weight": 0.5, "width": 0.0625}, {"from": "presidente", "physics": false, "to": "elei\u00e7\u00e3o", "weight": 0.5, "width": 0.0625}, {"from": "presidente", "physics": false, "to": "generais", "weight": 0.25, "width": 0.00390625}, {"from": "presidente", "physics": false, "to": "diversos", "weight": 0.25, "width": 0.00390625}, {"from": "presidente", "physics": false, "to": "ministro", "weight": 0.25, "width": 0.00390625}, {"from": "generais", "physics": false, "to": "Bolsonaro", "weight": 0.5, "width": 0.0625}, {"from": "generais", "physics": false, "to": "Planalto", "weight": 0.5, "width": 0.0625}, {"from": "generais", "physics": false, "to": "Ex\u00e9rcito", "weight": 0.5, "width": 0.0625}, {"from": "domingo", "physics": false, "to": "Moraes", "weight": 0.5, "width": 0.0625}, {"from": "domingo", "physics": false, "to": "Lula", "weight": 0.25, "width": 0.00390625}, {"from": "domingo", "physics": false, "to": "Bolsonaro", "weight": 0.25, "width": 0.00390625}, {"from": "Moraes", "to": "corte", "weight": 1.0, "width": 1.0}, {"from": "Moraes", "physics": false, "to": "PRF", "weight": 0.25, "width": 0.00390625}, {"from": "Moraes", "physics": false, "to": "estradas", "weight": 0.25, "width": 0.00390625}, {"from": "Moraes", "physics": false, "to": "ministro", "weight": 0.25, "width": 0.00390625}, {"from": "Moraes", "physics": false, "to": "Bolsonaro", "weight": 0.25, "width": 0.00390625}, {"from": "Bolsonaro", "to": "corte", "weight": 1.0, "width": 1.0}, {"from": "Bolsonaro", "physics": false, "to": "Constitui\u00e7\u00e3o", "weight": 0.5, "width": 0.0625}, {"from": "Bolsonaro", "physics": false, "to": "embate", "weight": 0.25, "width": 0.00390625}, {"from": "Bolsonaro", "physics": false, "to": "2018", "weight": 0.25, "width": 0.00390625}, {"from": "Bolsonaro", "physics": false, "to": "Lula", "weight": 0.125, "width": 0.000244140625}, {"from": "Bolsonaro", "physics": false, "to": "PRF", "weight": 0.125, "width": 0.000244140625}, {"from": "Federal", "physics": false, "to": "debate", "weight": 0.25, "width": 0.00390625}, {"from": "Federal", "physics": false, "to": "governo", "weight": 0.25, "width": 0.00390625}, {"from": "elei\u00e7\u00e3o", "to": "Lula", "weight": 1.0, "width": 1.0}, {"from": "elei\u00e7\u00e3o", "physics": false, "to": "2018", "weight": 0.25, "width": 0.00390625}, {"from": "pedir", "physics": false, "to": "Ex\u00e9rcito", "weight": 0.5, "width": 0.0625}, {"from": "pedir", "physics": false, "to": "Lula", "weight": 0.25, "width": 0.00390625}, {"from": "Constitui\u00e7\u00e3o", "to": "Ex\u00e9rcito", "weight": 1.0, "width": 1.0}, {"from": "Constitui\u00e7\u00e3o", "physics": false, "to": "Planalto", "weight": 0.5, "width": 0.0625}, {"from": "Constitui\u00e7\u00e3o", "physics": false, "to": "embate", "weight": 0.25, "width": 0.00390625}, {"from": "Ex\u00e9rcito", "physics": false, "to": "diversos", "weight": 0.25, "width": 0.00390625}, {"from": "corte", "physics": false, "to": "estradas", "weight": 0.25, "width": 0.00390625}, {"from": "corte", "physics": false, "to": "Lula", "weight": 0.25, "width": 0.00390625}, {"from": "corte", "physics": false, "to": "governo", "weight": 0.25, "width": 0.00390625}, {"from": "debate", "to": "Lula", "weight": 1.0, "width": 1.0}, {"from": "ministro", "physics": false, "to": "governo", "weight": 0.25, "width": 0.00390625}, {"from": "ministro", "physics": false, "to": "Planalto", "weight": 0.25, "width": 0.00390625}, {"from": "Planalto", "to": "embate", "weight": 1.0, "width": 1.0}, {"from": "PRF", "physics": false, "to": "estradas", "weight": 0.5, "width": 0.0625}, {"from": "estradas", "to": "diversos", "weight": 1.0, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+        // make a custom popup
+        var popup = document.createElement("div");
+        popup.className = 'popup';
+        popupTimeout = null;
+        popup.addEventListener('mouseover', function () {
+            console.log(popup)
+            if (popupTimeout !== null) {
+                clearTimeout(popupTimeout);
+                popupTimeout = null;
+            }
+        });
+        popup.addEventListener('mouseout', function () {
+            if (popupTimeout === null) {
+                hidePopup();
+            }
+        });
+        container.appendChild(popup);
+
+
+        // use the popup event to show
+        network.on("showPopup", function (params) {
+            showPopup(params);
+        });
+
+        // use the hide event to hide it
+        network.on("hidePopup", function (params) {
+            hidePopup();
+        });
+
+
+        // hiding the popup through css
+        function hidePopup() {
+            popupTimeout = setTimeout(function () { popup.style.display = 'none'; }, 500);
+        }
+
+        // showing the popup
+        function showPopup(nodeId) {
+            // get the data from the vis.DataSet
+            var nodeData = nodes.get([nodeId]);
+            popup.innerHTML = nodeData[0].title;
+
+            // get the position of the node
+            var posCanvas = network.getPositions([nodeId])[nodeId];
+
+            // get the bounding box of the node
+            var boundingBox = network.getBoundingBox(nodeId);
+
+            //position tooltip:
+            posCanvas.x = posCanvas.x + 0.5 * (boundingBox.right - boundingBox.left);
+
+            // convert coordinates to the DOM space
+            var posDOM = network.canvasToDOM(posCanvas);
+
+            // Give it an offset
+            posDOM.x += 10;
+            posDOM.y -= 20;
+
+            // show and place the tooltip.
+            popup.style.display = 'block';
+            popup.style.top = posDOM.y + 'px';
+            popup.style.left = posDOM.x + 'px';
+        }
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
