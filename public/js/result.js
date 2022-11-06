@@ -7,48 +7,34 @@ class Result{
 	}
 
 	createResult(){
-		this.result = document.createElement('div');
-		this.result.classList.add('result');
-		this.app.appendChild(this.result);
-		this.createTumnail();
-		this.createTitle();
+		this.createSideBar();
 	}
 
+	createSideBar(){
+		this.sideBar = document.createElement('div');
+		this.sideBar.classList.add('sideBar');
+		this.app.appendChild(this.sideBar);
+		this.createTumnail();
+	}
 
 	createTumnail(){
 		this.tumb = document.createElement('img');
 		this.tumb.setAttribute('src', 'http://img.youtube.com/vi/' + this.id + '/0.jpg');
 		this.tumb.setAttribute('id', 'tumb');
-		this.result.appendChild(this.tumb);
+		this.sideBar.appendChild(this.tumb);
 	}
 
-	createTitle(){
-		// fetch("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + this.id + "&key=" + ytApiKey, function(data) {
-		// 	alert(data.items[0].snippet.title);
-		//   })
-
-		// fetch('http://localhost:3000/api/serach/' + this.search.value, {
-		// 	method: 'GET',
-		// }).then
-		// (response => response.json()).then(data => {
-		// 	console.log(data);
-		// });
-		this.loadInfo(this.id);
+	createTitle(title){
+		this.title = document.createElement('h3');
+		this.title.setAttribute('id', 'videoTitle');
+		this.title.innerHTML = title;
+		this.sideBar.appendChild(this.title);
 	}
 
-	loadInfo(videoId) {
-		var gdata = document.createElement("script");
-		gdata.src = "http://gdata.youtube.com/feeds/api/videos/" + videoId + "?v=2&alt=jsonc&callback=storeInfo";
-		this.title = document.createElement('div');
-		this.title.setAttribute('id', 'tumb');
-		this.title.innerHTML = gdata.src;
-		console.log(gdata);
-		this.result.appendChild(this.title);
-	};
-	
-	storeInfo(info) {
-		console.log(info.data.title);
-	};
-
-
+	createData(data){
+		this.data = document.createElement('div');
+		this.data.setAttribute('id', 'data');
+		this.app.appendChild(this.data);
+		this.data.innerHTML = data;
+	}
 }

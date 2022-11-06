@@ -1,7 +1,8 @@
 import sys
 from youtube_transcript_api import YouTubeTranscriptApi
 
-x = sys.argv[1]
+id = sys.argv[1]
+title = sys.argv[2]
 
 def generate_transcript(id):
 	transcript = YouTubeTranscriptApi.get_transcript(id,languages=['en'])
@@ -15,5 +16,5 @@ def generate_transcript(id):
 	return script, len(script.split())
 
 
-transcript, no_of_words = generate_transcript(x)
+transcript, no_of_words = generate_transcript(id)
 print(transcript[0:100])

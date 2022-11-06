@@ -22,9 +22,8 @@ class Search{
 						method: 'GET',
 					}).then
 					(response => response.json()).then(data => {
-						document.querySelector("#mainDiv").innerHTML = data.result;
 						this.H.swapDisplay(true);
-						this.sendResult();
+						this.sendResult(data.title,data.result);
 					});
 				}else if(this.search.value.indexOf('http') == -1){
 					fetch('http://localhost:3000/api/serach/' + this.search.value, {
@@ -41,7 +40,14 @@ class Search{
 		});
 	}
 
-	sendResult(){
-		this.result = new Result(document.querySelector("#mainDiv"),this.search.value.split("=")[1]);
+	sendResult(title,data){
+		this.app.innerHTML = "";
+		this.r = document.createElement('div');
+		this.r.classList.add('result');
+		this.app.style.display = 'none';
+		document.querySelector("#app").appendChild(this.r);
+		this.result = new Result(this.r,this.search.value.split("=")[1]);
+		this.result.createTitle(title);
+		this.result.createData(data);
 	}
 }

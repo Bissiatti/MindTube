@@ -16,7 +16,7 @@ header{
     flex-direction: row;
     justify-content: flex-start;
     padding: 0 20px;
-    background-color: #636b6f;
+    /* background-color: #636b6f; */
     border-bottom: 5px solid rgba(0,0,0,0.2);
 }
 
@@ -48,6 +48,39 @@ header .search{
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.result{
+    display: grid;
+    grid-gap: 10px;
+    margin-top: 100px;
+    grid-template-columns:  25vw 70vw;
+    grid-template-areas: "side content";
+    display: #ededed;
+}
+
+#data{
+    grid-area: content;
+    margin-left: 10px;
+    display: block;
+}
+
+.sideBar{
+    grid-area: side;
+    width: 300px;
+    margin: 0;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: block;
+}
+
+
+
+.sideBar img{
+    max-width: 100%;
+    border-radius: 5px;
 }
 
 #TitleDiv{
