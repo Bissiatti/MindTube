@@ -84,8 +84,9 @@ name_lst = list(text_network.nodes)
 for i in name_lst:
     if ejectStopword(i,5) or not is_noun(i):
         merge_node = False
+        maxi = 0
         for j in text_network.neighbors(i):
-            maxi = 0
+            
             w = name_lst.index(j)
             if maxi < w and (not (ejectStopword(j,5) or not is_noun(j))):
                 maxi = w
