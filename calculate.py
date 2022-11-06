@@ -109,9 +109,13 @@ for i in list(legend_dict.keys()):
         if j in phrase.split() and (len(dict_moments[j]) == 0 or  dict_moments[j][-1]+episilon<i):
             dict_moments[j].append((i>1)*(int(i)-1))
 
-nt = Network('800px', '1000px', bgcolor='#222222', notebook=True)
+nt = Network('800px', '1000px', bgcolor='#222222', notebook=False)
 nt.from_nx(text_network)
 nt.force_atlas_2based(gravity = -200)
+
+nt.set_edge_smooth('continuous')
+
+
 for edg in nt.edges:
     # espessura e física das arestas
     #edg['width'] = text_network[i][j]['weight']**4
