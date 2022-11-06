@@ -82,21 +82,9 @@ name_lst = list(text_network.nodes)
 
 # remoção de stopwords
 for i in name_lst:
-    if ejectStopword(i,5) or not is_noun(i):
-        merge_node = False
-        maxi = 0
-        for j in text_network.neighbors(i):
-            
-            w = name_lst.index(j)
-            if maxi < w and (not (ejectStopword(j,5) or not is_noun(j))):
-                maxi = w
-                merge_node = j
-            for j in text_network.neighbors(i):
-                if merge_node:
-                    if not (j == merge_node or (j in text_network.neighbors(merge_node))):
-                        text_network.add_edge(merge_node, j, weight=text_network[i][j]['weight']/2)
+    if not is_noun(i):
         text_network.remove_node(i)
-
+        
 dict_moments = {}
 episilon = 45
 
@@ -114,7 +102,7 @@ nt = Network('800px', '1000px', bgcolor='#222222', notebook=False)
 nt.from_nx(text_network)
 nt.force_atlas_2based(gravity = -200)
 
-nt.set_edge_smooth('continuous')
+#nt.set_edge_smooth('continuous')
 
 
 for edg in nt.edges:
