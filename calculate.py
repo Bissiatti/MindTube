@@ -17,4 +17,4 @@ def generate_transcript(id):
 
 
 transcript, no_of_words = generate_transcript(id)
-print(transcript[0:100])
+print(title)

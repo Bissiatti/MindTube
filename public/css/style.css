@@ -53,7 +53,6 @@ header .search{
 .result{
     display: grid;
     grid-gap: 10px;
-    margin-top: 100px;
     grid-template-columns:  25vw 70vw;
     grid-template-areas: "side content";
     display: #ededed;
@@ -66,6 +65,7 @@ header .search{
 }
 
 .sideBar{
+    margin-top: 100px;
     grid-area: side;
     width: 300px;
     margin: 0;
@@ -79,6 +79,11 @@ header .search{
 
 
 .sideBar img{
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.sideBar iframe{
     max-width: 100%;
     border-radius: 5px;
 }

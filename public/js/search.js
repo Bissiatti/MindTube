@@ -23,14 +23,9 @@ class Search{
 					}).then
 					(response => response.json()).then(data => {
 						this.H.swapDisplay(true);
-						this.sendResult(data.title,data.result);
-					});
-				}else if(this.search.value.indexOf('http') == -1){
-					fetch('http://localhost:3000/api/serach/' + this.search.value, {
-						method: 'GET',
-					}).then
-					(response => response.json()).then(data => {
-						console.log(data);
+						let r = data.result.split('<script type="text/javascript">');
+						let script = r[1].split('</script>')[0];
+						this.sendResult(data.title,r[0],script); 
 					});
 				}else{
 					document.querySelector("#mainDiv").innerHTML = "Sem resultados, tente novamente";
@@ -40,14 +35,17 @@ class Search{
 		});
 	}
 
-	sendResult(title,data){
-		this.app.innerHTML = "";
+	sendResult(title,data,script){
 		this.r = document.createElement('div');
 		this.r.classList.add('result');
-		this.app.style.display = 'none';
-		document.querySelector("#app").appendChild(this.r);
+		let select = document.querySelector("#app")
+		select.removeChild(select.lastChild)
+		select.appendChild(this.r);
 		this.result = new Result(this.r,this.search.value.split("=")[1]);
 		this.result.createTitle(title);
 		this.result.createData(data);
+		this.result.createScript(script);
 	}
+
+
 }

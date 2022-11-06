@@ -1,21 +1,38 @@
 import { Router } from "express";
 const {spawn} = require('child_process');
 import axios from 'axios';
+const path = require('path')
+import * as fs from 'fs';
 
 const url:string = "https://www.youtube.com/watch?v="
 const AxiosInstance = axios.create();
 
 export const router = Router()
 
+const result_html = "text_network.html"
+
 router.get('/',(req,res)=>{
 	console.log("yes")
+})
+
+
+function readHTML(){
+	let fileContent = fs.readFileSync(result_html, 'utf8');
+	let body = fileContent.split("<body>")[1].split("</body>")[0]
+	return body
+}
+
+router.get("/graph",(req,res)=>{
+	res.sendFile('graph.html', {
+        root: path.join(__dirname, './')
+    })
 })
 
 router.get('/api/video/:data',(req,res)=>{
 	let data: string = req.params.data
 	//console.log(str)
 
-	AxiosInstance.get(url + 'Mm2eYfj0SgA').then((response: any)=>{
+	AxiosInstance.get(url + data).then((response: any)=>{
 		const html = response.data;
 		let title:string = html.match(/(?<=<title>)(.*)(?=<\/title>)/g);
 		title = title[0].replace(" - YouTube", "");
@@ -25,11 +42,15 @@ router.get('/api/video/:data',(req,res)=>{
 		const python = spawn('python',["calculate.py",data,title]);
 
 		python.stdout.on('data',(data: any)=>{
-		  res.send({'result': String(data), 'title': title})
+			let graph : string = readHTML()
+			res.send({'result': graph, 'title': title})
+		// 	res.sendFile('graph.html', {
+		// 		root: path.join(__dirname, './')
+		// }	)
 		})
 		
 		python.on('close',(code: any)=>{
-		  console.log("exit: " + code)
+			console.log("exit: " + code)
 		})
 	
 		python.stderr.on("data",(error: any)=>{
@@ -39,16 +60,8 @@ router.get('/api/video/:data',(req,res)=>{
 
 })
 
-
-// // Send an async HTTP Get request to the url
-// AxiosInstance.get(url + 'ZjM8Wq5pQ2o')
-//   .then( // Once we have data returned ...
-//     response => {
-//       const html = response.data; // Get the HTML from the HTTP request
-//       const $ = cheerio.load(html); // Load the HTML string into cheerio
-// 	  console.log(html)
-//     //   const statsTable: any = $('.statsTableContainer > tr'); // Parse the HTML and extract just whatever code contains .statsTableContainer and has tr inside
-//     //   console.log(statsTable); // Log the number of captured elements
-//     }
-//   )
-//   .catch(console.error); // Error handling
+router.get('/api/play/:id/:time',(req,res)=>{
+	let id: string = req.params.id
+	let time: string = req.params.time
+	res.send({'id': id, 'time': time})
+})

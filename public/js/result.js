@@ -14,7 +14,7 @@ class Result{
 		this.sideBar = document.createElement('div');
 		this.sideBar.classList.add('sideBar');
 		this.app.appendChild(this.sideBar);
-		this.createTumnail();
+		this.createVideo(0);
 	}
 
 	createTumnail(){
@@ -36,5 +36,20 @@ class Result{
 		this.data.setAttribute('id', 'data');
 		this.app.appendChild(this.data);
 		this.data.innerHTML = data;
+	}
+
+	createScript(script){
+		this.script = document.createElement('script');
+		this.script.setAttribute('type', 'text/javascript');
+		this.script.innerHTML = script;
+		console.log(this.script);
+		this.app.appendChild(this.script);
+	}
+
+	createVideo(time){
+		this.video = document.createElement('iframe');
+		this.video.setAttribute('src', 'https://www.youtube.com/embed/' + this.id + '?start'+time);
+		this.video.setAttribute('id', 'video');
+		this.sideBar.appendChild(this.video);
 	}
 }
