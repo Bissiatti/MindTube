@@ -42,8 +42,8 @@ class Search{
 		select.removeChild(select.lastChild)
 		select.appendChild(this.r);
 		this.result = new Result(this.r,this.search.value.split("=")[1]);
-		this.result.createTitle(title);
 		this.result.createData(data);
+		this.result.createVideo(0,title);
 		this.result.createScript(script);
 	}
 

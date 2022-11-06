@@ -44,12 +44,26 @@ class Result{
 		this.script.innerHTML = script;
 		console.log(this.script);
 		this.app.appendChild(this.script);
+		this.setTimeout(() => {
+			this.createButtonsClick();
+		}, 100);
 	}
 
-	createVideo(time){
+	createButtonsClick(){
+		buttons = document.querySelectorAll('button');
+		for (let i = 0; i < buttons.length; i++){
+			buttons[i].addEventListener('click', (e) => {
+				createVideo(e.target.id);
+			});
+		}
+	}
+
+	createVideo(time,title){
+		this.sideBar.innerHTML = '';
 		this.video = document.createElement('iframe');
 		this.video.setAttribute('src', 'https://www.youtube.com/embed/' + this.id + '?start'+time);
 		this.video.setAttribute('id', 'video');
 		this.sideBar.appendChild(this.video);
+		this.createTitle(title);
 	}
 }
