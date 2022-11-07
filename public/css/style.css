@@ -6,6 +6,10 @@ body{
     color: #636b6f;
 }
 
+#aguarde{
+    margin-left: 50px;
+}
+
 
 header{
     height: 100px;

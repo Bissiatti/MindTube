@@ -7,6 +7,9 @@ class Search{
 		this.H = H;
 		this.app = document.querySelector("#mainDiv");
 		this.sendSearch();
+		this.aguarde = document.createElement('div');
+		this.aguarde.setAttribute('id', 'aguarde');
+		this.aguarde.innerHTML = "Aguarde...";
 
 	}
 
@@ -18,10 +21,14 @@ class Search{
 		this.search.addEventListener('keypress', (e) => {
 			if(e.key == 'Enter'){
 				if(this.search.value.indexOf('=') != -1 && this.search.value.indexOf('youtube') != -1){
+					this.search.style.display = 'none';
+					this.search.parentElement.appendChild(this.aguarde);
 					fetch('http://localhost:3000/api/video/' + this.search.value.split("=")[1], {
 						method: 'GET',
 					}).then
 					(response => response.json()).then(data => {
+						this.search.style.display = 'block';
+						this.search.parentElement.removeChild(this.aguarde);
 						this.H.swapDisplay(true);
 						let r = data.result.split('<script type="text/javascript">');
 						let script = r[1].split('</script>')[0];
