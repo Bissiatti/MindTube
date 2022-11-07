@@ -146,7 +146,11 @@ for n in nt.nodes:
                  "&t="+str(time)+"s' target='_blank' rel='noopener noreferrer'>"+time_to_min(time)+"<br>" for time in dict_moments[n['label']]]
     '''
 
-    link_list = ['"<button type="button">'+str(time) +'</button>"' for time in dict_moments[n["label"]]]
+    link_list = ["<a href='https://www.youtube.com/watch?v="+str(iden)+
+                 "&t="+str(time)+"s' target='_blank' rel='noopener noreferrer'>"+time_to_min(time)+"<br>" for time in dict_moments[n['label']]]
+
+
+    #link_list = ['<button type="button">'+str(time) +'</button>' for time in dict_moments[n["label"]]]
 
     soma = ''
     for k in link_list:
