@@ -126,9 +126,9 @@ def calc_centrality(G, title):
                 m += 0
 
         return m/len(title)
-
-    centrality = {x[0]:(x[1]**0.5)*
-                  mean_simi(x[0],title_words)/(mean_simi(x[0],stpwrd)+0.000001)
+    
+    centrality = {x[0]:(x[1])*
+                  ((mean_simi(x[0],title_words)/(mean_simi(x[0],stpwrd)+0.000001)))
                   for x in centrality.items()}
-
+    
     return sorted(centrality.items(), key=lambda x: x[1], reverse=False)

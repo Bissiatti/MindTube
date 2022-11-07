@@ -14,6 +14,7 @@ from nltk import download as nltkdownload
 from calc_aux import *
 
 is_noun = lambda word: pos_tag(word_tokenize(word))[0][1] == 'NN'
+is_adj = lambda word: pos_tag(word_tokenize(word))[0][1] == 'JJ'
 
 #sys args
 iden = sys.argv[1]
@@ -68,7 +69,7 @@ for x in centrality:
 name_lst = [x[0] for x in centrality]
 
 # lista de nós a serem removidos, estamos mantendo os 25 maiores
-rmv_lst = name_lst[:-40]
+rmv_lst = name_lst[:-30]
 
 # exibição do nome dos nós para a visualização
 for i in text_network.nodes:
@@ -82,9 +83,19 @@ name_lst = list(text_network.nodes)
 
 # remoção de stopwords
 for i in name_lst:
-    if not is_noun(i):
+    if not (is_noun(i) or is_adj(i)):
+        merge_node = False
+        maxi = 0
+        for j in text_network.neighbors(i):
+            w = name_lst.index(j)
+            if (is_noun(j) or is_adj(i)) and maxi<w:
+                maxi = w
+                merge_node = j
+        if merge_node:
+                if not (j == merge_node or (j in text_network.neighbors(merge_node))):
+                    text_network.add_edge(merge_node, j, weight=text_network[i][j]['weight']/2)
         text_network.remove_node(i)
-        
+     
 dict_moments = {}
 episilon = 45
 
@@ -98,7 +109,7 @@ for i in list(legend_dict.keys()):
         if j in phrase.split() and (len(dict_moments[j]) == 0 or  dict_moments[j][-1]+episilon<i):
             dict_moments[j].append((i>1)*(int(i)-1))
 
-nt = Network('800px', '1000px', bgcolor='#222222', notebook=False)
+nt = Network('800px', '1000px', bgcolor='#ffffff', notebook=False)
 nt.from_nx(text_network)
 nt.force_atlas_2based(gravity = -200)
 
@@ -112,7 +123,7 @@ for edg in nt.edges:
     
     if edg['from'] == edg['to']:
         edg['hidden'] = True
-    edg['physics'] = True
+    edg['physics'] = False
     edg['color'] = '#cf888f'
 
 for n in nt.nodes:
@@ -120,7 +131,10 @@ for n in nt.nodes:
     n['shape'] = 'ellipse'
     size = 40*(cen_dict[n['label']]/max_cen)**0.4
     n['font'] = str(int(size))+'px arial white'
-    n['color'] = '#7f333f'
+    if is_noun(n['label']):
+        n['color'] = '#7f333f'
+    else:
+        n['color'] = '#636b6f'
     n['labelHighlightBold'] = True
 
 def time_to_min(time):
