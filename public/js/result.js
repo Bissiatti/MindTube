@@ -44,9 +44,10 @@ class Result{
 		this.script.innerHTML = script;
 		console.log(this.script);
 		this.app.appendChild(this.script);
-		setTimeout(() => {
-			this.createButtonsClick();
-		}, 1000);
+		// Infelizmente não consegui fazer o botão funcionar por falta de tempo
+		// setTimeout(() => {
+		// 	this.createButtonsClick();
+		// }, 1000);
 	}
 
 	createButtonsClick(){
