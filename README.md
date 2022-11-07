@@ -25,6 +25,19 @@ http://localhost:3000/
 
 Insira o link do youtube (somente até a ID) e aguarde.
 
+
+#### Exemplos:
+##### History of China
+![History of China](https://github.com/Bissiatti/MindTube/blob/main/images/China1.png)  
+https://www.youtube.com/watch?v=AH15-efqkzY  
   
+ ##### Introduction to Assembly
+![Introduction to Assembly](https://github.com/Bissiatti/MindTube/blob/main/images/assembly.jpg)  
+https://www.youtube.com/watch?v=L1ung0wil9Y  
+
+##### Fourier Series
+![Fourier Series](https://github.com/Bissiatti/MindTube/blob/main/images/Fourrier.png)  
+https://www.youtube.com/watch?v=r6sGWTCMz2k  
+
   <br>
 Projeto feito para o Hackathon FGV EMAp + Sofya 2022
