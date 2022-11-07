@@ -33,7 +33,7 @@ router.get('/api/video/:data',(req,res)=>{
 	
 		return title;
 	}).then((title:string)=>{
-		const python = spawn('python',["calculate.py",data,title]);
+		const python = spawn('python',["calc.py",data,title]);
 		console.log("python")
 		
 		python.stdout.on('data',(data: any)=>{

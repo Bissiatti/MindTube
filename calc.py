@@ -153,6 +153,6 @@ for n in nt.nodes:
         soma += k
     n['title'] = soma
     
-nt.save_graph("src/routes/text_network.html")
+nt.save_graph("text_network.html")
 
 print("done")
