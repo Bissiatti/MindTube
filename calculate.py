@@ -113,8 +113,7 @@ nt = Network('800px', '1000px', bgcolor='#ffffff', notebook=False)
 nt.from_nx(text_network)
 nt.force_atlas_2based(gravity = -200)
 
-#nt.set_edge_smooth('continuous')
-
+nt.set_edge_smooth('continuous')
 
 for edg in nt.edges:
     # espessura e física das arestas
@@ -154,4 +153,6 @@ for n in nt.nodes:
         soma += k
     n['title'] = soma
     
-nt.show("text_network.html")
+nt.save_graph("src/routes/text_network.html")
+
+print("done")

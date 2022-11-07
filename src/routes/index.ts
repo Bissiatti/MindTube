@@ -16,12 +16,6 @@ router.get('/',(req,res)=>{
 })
 
 
-function readHTML(){
-	let fileContent = fs.readFileSync(result_html, 'utf8');
-	let body = fileContent.split("<body>")[1].split("</body>")[0]
-	return body
-}
-
 router.get("/graph",(req,res)=>{
 	res.sendFile('graph.html', {
         root: path.join(__dirname, './')
@@ -40,17 +34,19 @@ router.get('/api/video/:data',(req,res)=>{
 		return title;
 	}).then((title:string)=>{
 		const python = spawn('python',["calculate.py",data,title]);
-
+		console.log("python")
+		
 		python.stdout.on('data',(data: any)=>{
-			let graph : string = readHTML()
-			res.send({'result': graph, 'title': title})
-		// 	res.sendFile('graph.html', {
-		// 		root: path.join(__dirname, './')
-		// }	)
+			return
 		})
 		
 		python.on('close',(code: any)=>{
 			console.log("exit: " + code)
+			fs.readFile(result_html, 'utf8', (err, data) => {
+				console.log(err)
+				console.log(data)
+				res.send({'result': data, 'title': title})
+			});
 		})
 	
 		python.stderr.on("data",(error: any)=>{
